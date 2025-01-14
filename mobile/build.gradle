@@ -46,6 +46,10 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
@@ -63,6 +67,12 @@ dependencies {
         exclude group: 'commons-beanutils', module: 'commons-beanutils'
     }
     implementation "com.android.billingclient:billing-ktx:4.0.0"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
