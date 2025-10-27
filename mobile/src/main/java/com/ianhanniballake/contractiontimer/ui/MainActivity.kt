@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         if (data.count == 0)
             return
         val averageDurationView = findViewById<TextView>(R.id.average_duration)
-        val averageFrequencyView = findViewById<TextView>(R.id.average_frequency)
+        val averageIntervalView = findViewById<TextView>(R.id.average_interval)
         data.moveToLast()
         val startTimeColumnIndex =
             data.getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_START_TIME)
@@ -266,7 +266,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
             relativeTimeSpan,
             count,
                 averageDurationView.text,
-                averageFrequencyView.text)
+                averageIntervalView.text)
         val context = this
         GlobalScope.launch(Dispatchers.Main) {
             val uri = withContext(Dispatchers.IO) {

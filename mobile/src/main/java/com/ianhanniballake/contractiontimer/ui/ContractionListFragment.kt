@@ -475,15 +475,15 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
             }
             if (startCal.get(Calendar.YEAR) != endCal.get(Calendar.YEAR) || startCal.get(Calendar.DAY_OF_YEAR) != endCal.get(Calendar.DAY_OF_YEAR))
                 showDateOnEndTime = true
-            val frequencyView = view.findViewById<TextView>(R.id.frequency)
+            val intervalView = view.findViewById<TextView>(R.id.interval)
             // If we aren't the last entry, move to the next (previous in time)
-            // contraction to get its start time to compute the frequency
+            // contraction to get its start time to compute the interval
             if (!cursor.isLast && cursor.moveToNext()) {
                 val prevContractionStartTimeColumnIndex = cursor.getColumnIndex(
                         ContractionContract.Contractions.COLUMN_NAME_START_TIME)
                 val prevContractionStartTime = cursor.getLong(prevContractionStartTimeColumnIndex)
-                val frequencyInSeconds = (startTime - prevContractionStartTime) / 1000
-                frequencyView.text = DateUtils.formatElapsedTime(frequencyInSeconds)
+                val intervalInSeconds = (startTime - prevContractionStartTime) / 1000
+                intervalView.text = DateUtils.formatElapsedTime(intervalInSeconds)
                 // Check to see if the date changed between Contractions
                 val prevContractionEndTimeColumnIndex = cursor.getColumnIndex(
                         ContractionContract.Contractions.COLUMN_NAME_END_TIME)
@@ -495,7 +495,7 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
                 // Go back to the previous spot
                 cursor.moveToPrevious()
             } else {
-                frequencyView.text = ""
+                intervalView.text = ""
                 // Always show the date on the very first start time
                 showDateOnStartTime = true
             }

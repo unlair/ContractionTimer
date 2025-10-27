@@ -2,6 +2,6 @@
 <resources>
 
     <string name="average_duration_label">Duration:</string>
-    <string name="average_frequency_label">Frequency:</string>
+    <string name="average_interval_label">Interval:</string>
 
 </resources>

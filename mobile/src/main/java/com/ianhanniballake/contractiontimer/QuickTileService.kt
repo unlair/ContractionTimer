@@ -54,15 +54,15 @@ class QuickTileService : TileService() {
                 getString(R.string.pref_average_time_frame_default))?.toLong() ?: return
         val timeCutoff = System.currentTimeMillis() - averagesTimeFrame
         val selectionArgs = arrayOf(timeCutoff.toString())
-        // Get the average duration and frequency
+        // Get the average duration and interval
         val averages: String? = contentResolver.query(
                 ContractionContract.Contractions.CONTENT_URI, projection,
                 selection, selectionArgs, null)?.use { data ->
             if (data.moveToFirst()) {
                 var averageDuration = 0.0
-                var averageFrequency = 0.0
+                var averageInterval = 0.0
                 var numDurations = 0
-                var numFrequencies = 0
+                var numIntervals = 0
                 while (!data.isAfterLast) {
                     val startTimeColumnIndex = data
                             .getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_START_TIME)
@@ -79,16 +79,16 @@ class QuickTileService : TileService() {
                         val prevContractionStartTimeColumnIndex = data
                                 .getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_START_TIME)
                         val prevContractionStartTime = data.getLong(prevContractionStartTimeColumnIndex)
-                        val curFrequency = startTime - prevContractionStartTime
-                        averageFrequency = (curFrequency + numFrequencies * averageFrequency) / (numFrequencies + 1)
-                        numFrequencies++
+                        val curInterval = startTime - prevContractionStartTime
+                        averageInterval = (curInterval + numIntervals * averageInterval) / (numIntervals + 1)
+                        numIntervals++
                     }
                 }
                 val averageDurationInSeconds = (averageDuration / 1000).toLong()
                 val formattedAverageDuration = DateUtils.formatElapsedTime(averageDurationInSeconds)
-                val averageFrequencyInSeconds = (averageFrequency / 1000).toLong()
-                val formattedAverageFrequency = DateUtils.formatElapsedTime(averageFrequencyInSeconds)
-                getString(R.string.tile_label, formattedAverageDuration, formattedAverageFrequency)
+                val averageIntervalInSeconds = (averageInterval / 1000).toLong()
+                val formattedAverageInterval = DateUtils.formatElapsedTime(averageIntervalInSeconds)
+                getString(R.string.tile_label, formattedAverageDuration, formattedAverageInterval)
             } else {
                 null
             }

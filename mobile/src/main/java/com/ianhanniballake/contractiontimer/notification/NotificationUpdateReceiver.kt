@@ -158,11 +158,11 @@ class NotificationUpdateReceiver : BroadcastReceiver() {
             publicBuilder.setWhen(time)
             builder.setUsesChronometer(true)
             publicBuilder.setUsesChronometer(true)
-            // Get the average duration and frequency
+            // Get the average duration and interval
             var averageDuration = 0.0
-            var averageFrequency = 0.0
+            var averageInterval = 0.0
             var numDurations = 0
-            var numFrequencies = 0
+            var numIntervals = 0
             while (!data.isAfterLast) {
                 val startTime = data.getLong(startTimeColumnIndex)
                 if (!data.isNull(endTimeColumnIndex)) {
@@ -173,22 +173,22 @@ class NotificationUpdateReceiver : BroadcastReceiver() {
                 }
                 if (data.moveToNext()) {
                     val prevContractionStartTime = data.getLong(startTimeColumnIndex)
-                    val curFrequency = startTime - prevContractionStartTime
-                    averageFrequency = (curFrequency + numFrequencies * averageFrequency) / (numFrequencies + 1)
-                    numFrequencies++
+                    val curInterval = startTime - prevContractionStartTime
+                    averageInterval = (curInterval + numIntervals * averageInterval) / (numIntervals + 1)
+                    numIntervals++
                 }
             }
             val averageDurationInSeconds = (averageDuration / 1000).toLong()
             val formattedAverageDuration = DateUtils.formatElapsedTime(averageDurationInSeconds)
-            val averageFrequencyInSeconds = (averageFrequency / 1000).toLong()
-            val formattedAverageFrequency = DateUtils.formatElapsedTime(averageFrequencyInSeconds)
+            val averageIntervalInSeconds = (averageInterval / 1000).toLong()
+            val formattedAverageInterval = DateUtils.formatElapsedTime(averageIntervalInSeconds)
             val contentText = context.getString(R.string.notification_content_text,
-                    formattedAverageDuration, formattedAverageFrequency)
+                    formattedAverageDuration, formattedAverageInterval)
             val bigTextWithoutNote = context.getString(R.string.notification_big_text,
-                    formattedAverageDuration, formattedAverageFrequency)
+                    formattedAverageDuration, formattedAverageInterval)
             val bigText = if (hasNote) {
                 context.getString(R.string.notification_big_text_with_note,
-                        formattedAverageDuration, formattedAverageFrequency, note)
+                        formattedAverageDuration, formattedAverageInterval, note)
             } else {
                 bigTextWithoutNote
             }
@@ -212,8 +212,8 @@ class NotificationUpdateReceiver : BroadcastReceiver() {
                         )
                         .addLine(
                             context.getString(
-                                R.string.notification_second_page_frequency,
-                                formattedAverageFrequency
+                                R.string.notification_second_page_interval,
+                                formattedAverageInterval
                             )
                         )
                 )

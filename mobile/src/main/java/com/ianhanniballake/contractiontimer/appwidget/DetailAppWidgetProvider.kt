@@ -54,16 +54,16 @@ class DetailAppWidgetProvider : AppWidgetProvider() {
                     context.getString(R.string.pref_average_time_frame_default))!!.toLong()
             val timeCutoff = System.currentTimeMillis() - averagesTimeFrame
             val selectionArgs = arrayOf(timeCutoff.toString())
-            // Set the average duration and frequency
+            // Set the average duration and interval
             var formattedAverageDuration = ""
-            var formattedAverageFrequency = ""
+            var formattedAverageInterval = ""
             context.contentResolver.query(ContractionContract.Contractions.CONTENT_URI, projection,
                     selection, selectionArgs, null)?.closeable()?.use { data ->
                 if (data.moveToFirst()) {
                     var averageDuration = 0.0
-                    var averageFrequency = 0.0
+                    var averageInterval = 0.0
                     var numDurations = 0
-                    var numFrequencies = 0
+                    var numIntervals = 0
                     while (!data.isAfterLast) {
                         val startTimeColumnIndex = data.getColumnIndex(
                                 ContractionContract.Contractions.COLUMN_NAME_START_TIME)
@@ -80,15 +80,15 @@ class DetailAppWidgetProvider : AppWidgetProvider() {
                             val prevContractionStartTimeColumnIndex = data.getColumnIndex(
                                     ContractionContract.Contractions.COLUMN_NAME_START_TIME)
                             val prevContractionStartTime = data.getLong(prevContractionStartTimeColumnIndex)
-                            val curFrequency = startTime - prevContractionStartTime
-                            averageFrequency = (curFrequency + numFrequencies * averageFrequency) / (numFrequencies + 1)
-                            numFrequencies++
+                            val curInterval = startTime - prevContractionStartTime
+                            averageInterval = (curInterval + numIntervals * averageInterval) / (numIntervals + 1)
+                            numIntervals++
                         }
                     }
                     val averageDurationInSeconds = (averageDuration / 1000).toLong()
                     formattedAverageDuration = DateUtils.formatElapsedTime(averageDurationInSeconds)
-                    val averageFrequencyInSeconds = (averageFrequency / 1000).toLong()
-                    formattedAverageFrequency = DateUtils.formatElapsedTime(averageFrequencyInSeconds)
+                    val averageIntervalInSeconds = (averageInterval / 1000).toLong()
+                    formattedAverageInterval = DateUtils.formatElapsedTime(averageIntervalInSeconds)
                 }
             }
             // Determine whether a contraction is currently ongoing
@@ -126,7 +126,7 @@ class DetailAppWidgetProvider : AppWidgetProvider() {
                 views.setOnClickPendingIntent(R.id.application_launch, applicationLaunchPendingIntent)
                 // Add in the averages
                 views.setTextViewText(R.id.average_duration, formattedAverageDuration)
-                views.setTextViewText(R.id.average_frequency, formattedAverageFrequency)
+                views.setTextViewText(R.id.average_interval, formattedAverageInterval)
                 // Add the intent for the toggle button
                 val toggleContractionIntent = Intent(context, AppWidgetToggleReceiver::class.java).apply {
                     putExtra(AppWidgetToggleReceiver.WIDGET_NAME_EXTRA, WIDGET_IDENTIFIER)

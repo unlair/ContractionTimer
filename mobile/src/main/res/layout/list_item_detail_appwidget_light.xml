@@ -47,7 +47,7 @@
         android:textIsSelectable="false"/>
 
     <TextView
-        android:id="@+id/frequency"
+        android:id="@+id/interval"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

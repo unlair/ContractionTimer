@@ -16,7 +16,7 @@ import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.provider.ContractionContract
 
 /**
- * Fragment which displays the average duration and frequency
+ * Fragment which displays the average duration and interval
  */
 class ContractionAverageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     @Deprecated("Deprecated in Java")
@@ -54,27 +54,27 @@ class ContractionAverageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cur
         val view = view ?: return
         val averageLayout = view.findViewById<View>(R.id.average_layout)
         val averageDurationView = view.findViewById<TextView>(R.id.average_duration)
-        val averageFrequencyView = view.findViewById<TextView>(R.id.average_frequency)
+        val averageIntervalView = view.findViewById<TextView>(R.id.average_interval)
         averageLayout.visibility = View.GONE
         averageDurationView.text = ""
-        averageFrequencyView.text = ""
+        averageIntervalView.text = ""
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
         val view = view ?: return
         val averageLayout = view.findViewById<View>(R.id.average_layout)
         val averageDurationView = view.findViewById<TextView>(R.id.average_duration)
-        val averageFrequencyView = view.findViewById<TextView>(R.id.average_frequency)
+        val averageIntervalView = view.findViewById<TextView>(R.id.average_interval)
         if (data == null || !data.moveToFirst()) {
             averageLayout.visibility = View.GONE
             averageDurationView.text = ""
-            averageFrequencyView.text = ""
+            averageIntervalView.text = ""
             return
         }
         var averageDuration = 0.0
-        var averageFrequency = 0.0
+        var averageInterval = 0.0
         var numDurations = 0
-        var numFrequencies = 0
+        var numIntervals = 0
         while (!data.isAfterLast) {
             val startTimeColumnIndex = data.getColumnIndex(
                     ContractionContract.Contractions.COLUMN_NAME_START_TIME)
@@ -91,16 +91,16 @@ class ContractionAverageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cur
                 val prevContractionStartTimeColumnIndex = data.getColumnIndex(
                         ContractionContract.Contractions.COLUMN_NAME_START_TIME)
                 val prevContractionStartTime = data.getLong(prevContractionStartTimeColumnIndex)
-                val curFrequency = startTime - prevContractionStartTime
-                averageFrequency = (curFrequency + numFrequencies * averageFrequency) / (numFrequencies + 1)
-                numFrequencies++
+                val curInterval = startTime - prevContractionStartTime
+                averageInterval = (curInterval + numIntervals * averageInterval) / (numIntervals + 1)
+                numIntervals++
             }
         }
         averageLayout.visibility = View.VISIBLE
         val averageDurationInSeconds = (averageDuration / 1000).toLong()
         averageDurationView.text = DateUtils.formatElapsedTime(averageDurationInSeconds)
-        val averageFrequencyInSeconds = (averageFrequency / 1000).toLong()
-        averageFrequencyView.text = DateUtils.formatElapsedTime(averageFrequencyInSeconds)
+        val averageIntervalInSeconds = (averageInterval / 1000).toLong()
+        averageIntervalView.text = DateUtils.formatElapsedTime(averageIntervalInSeconds)
     }
 
     override fun onResume() {

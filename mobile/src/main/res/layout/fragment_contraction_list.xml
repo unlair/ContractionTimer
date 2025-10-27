@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:text="@string/list_header_frequency"
+            android:text="@string/list_header_interval"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
         <Space

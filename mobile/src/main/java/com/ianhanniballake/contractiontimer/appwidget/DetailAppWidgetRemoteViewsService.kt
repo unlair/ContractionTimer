@@ -80,13 +80,13 @@ class DetailAppWidgetRemoteViewsService : RemoteViewsService() {
                     views.setTextViewText(R.id.duration, DateUtils.formatElapsedTime(durationInSeconds))
                 }
                 // If we aren't the last entry, move to the next (previous in time)
-                // contraction to get its start time to compute the frequency
+                // contraction to get its start time to compute the interval
                 if (!data.isLast && data.moveToNext()) {
                     val prevContractionStartTimeColumnIndex = data
                         .getColumnIndex(Contractions.COLUMN_NAME_START_TIME)
                     val prevContractionStartTime = data.getLong(prevContractionStartTimeColumnIndex)
-                    val frequencyInSeconds = (startTime - prevContractionStartTime) / 1000
-                    views.setTextViewText(R.id.frequency, DateUtils.formatElapsedTime(frequencyInSeconds))
+                    val intervalInSeconds = (startTime - prevContractionStartTime) / 1000
+                    views.setTextViewText(R.id.interval, DateUtils.formatElapsedTime(intervalInSeconds))
                     // Go back to the previous spot
                     data.moveToPrevious()
                 }

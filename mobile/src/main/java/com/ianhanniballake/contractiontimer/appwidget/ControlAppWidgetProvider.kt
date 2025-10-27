@@ -69,12 +69,12 @@ class ControlAppWidgetProvider : AppWidgetProvider() {
             val selectionArgs = arrayOf(timeCutoff.toString())
             context.contentResolver.query(ContractionContract.Contractions.CONTENT_URI, projection,
                     selection, selectionArgs, null)?.closeable()?.use { data ->
-                // Set the average duration and frequency
+                // Set the average duration and interval
                 if (data.moveToFirst()) {
                     var averageDuration = 0.0
-                    var averageFrequency = 0.0
+                    var averageInterval = 0.0
                     var numDurations = 0
-                    var numFrequencies = 0
+                    var numIntervals = 0
                     while (!data.isAfterLast) {
                         val startTimeColumnIndex = data
                                 .getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_START_TIME)
@@ -91,18 +91,18 @@ class ControlAppWidgetProvider : AppWidgetProvider() {
                             val prevContractionStartTimeColumnIndex = data
                                     .getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_START_TIME)
                             val prevContractionStartTime = data.getLong(prevContractionStartTimeColumnIndex)
-                            val curFrequency = startTime - prevContractionStartTime
-                            averageFrequency = (curFrequency + numFrequencies * averageFrequency) / (numFrequencies + 1)
-                            numFrequencies++
+                            val curInterval = startTime - prevContractionStartTime
+                            averageInterval = (curInterval + numIntervals * averageInterval) / (numIntervals + 1)
+                            numIntervals++
                         }
                     }
                     val averageDurationInSeconds = (averageDuration / 1000).toLong()
                     views.setTextViewText(R.id.average_duration, DateUtils.formatElapsedTime(averageDurationInSeconds))
-                    val averageFrequencyInSeconds = (averageFrequency / 1000).toLong()
-                    views.setTextViewText(R.id.average_frequency, DateUtils.formatElapsedTime(averageFrequencyInSeconds))
+                    val averageIntervalInSeconds = (averageInterval / 1000).toLong()
+                    views.setTextViewText(R.id.average_interval, DateUtils.formatElapsedTime(averageIntervalInSeconds))
                 } else {
                     views.setTextViewText(R.id.average_duration, "")
-                    views.setTextViewText(R.id.average_frequency, "")
+                    views.setTextViewText(R.id.average_interval, "")
                 }
             }
 
