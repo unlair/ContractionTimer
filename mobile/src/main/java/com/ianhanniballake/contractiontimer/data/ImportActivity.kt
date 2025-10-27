@@ -32,7 +32,7 @@ class ImportActivity : FragmentActivity() {
         if (savedInstanceState == null) {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "text/csv"
+                type = "text/*"
             }
             startActivityForResult(intent, REQUEST_CODE_OPEN)
         }
